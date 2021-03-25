@@ -2,7 +2,7 @@
 
 // Define SVG area dimensions
 var svgWidth = 1000;
-var svgHeight = 500;
+var svgHeight = 620;
 
 // Define the chart's margins as an object
 var chartMargin = {
@@ -94,7 +94,7 @@ data.healthcare = +data.healthcare
 
     // Step 8: Create event listeners to display and hide the tooltip
     // ==============================
-    circlesGroup.on("click", function(data) {
+    circlesGroup.on("mouseover", function(data) {
         toolTip.show(data, this);
       })
         // onmouseout event
