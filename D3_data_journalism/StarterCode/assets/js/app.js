@@ -6,10 +6,10 @@ var svgHeight = 500;
 
 // Define the chart's margins as an object
 var chartMargin = {
-    top: 30,
-    right: 30,
-    bottom: 30,
-    left: 30
+    top: 20,
+    right: 40,
+    bottom: 60,
+    left: 100
   };
 
 // Define dimensions of the chart area
@@ -46,15 +46,12 @@ data.healthcare = +data.healthcare
 // Step 2: Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
-      .domain([20, d3.max(lifeData, d => d.poverty)])
+      .domain([8, d3.max(lifeData, d => d.poverty)])
       .range([0, chartWidth]);
 
     var yLinearScale = d3.scaleLinear()
       .domain([0, d3.max(lifeData, d => d.healthcare)])
       .range([chartHeight, 0]);
-
-      // var xLinearScale = d3.scaleLinear().range([0, width]);
-      // var yLinearScale = d3.scaleLinear().range([svgHeight, 0]);
 
 // Step 3: Create axis functions
     // ==============================
@@ -82,14 +79,13 @@ data.healthcare = +data.healthcare
     .attr("fill", "pink")
     .attr("opacity", ".5");
 
-
 // Step 6: Initialize tool tip
     // ==============================
     var toolTip = d3.tip()
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return (`${d.abbr}<br>poverty: ${d.poverty}<br>healthcare: ${d.healthcare}`);
+        return (`${d.abbr}<br>Poverty (%): ${d.poverty}<br>Healthcare (%): ${d.healthcare}`);
       });
 
     // Step 7: Create tooltip in the chart
@@ -106,34 +102,37 @@ data.healthcare = +data.healthcare
           toolTip.hide(data);
         });
   
-// Create axes labels
 
+  // Create label for data points
   chartGroup.append("text")
+  .style("text-anchor", "middle")
   .style("font-size", "12px")
   .selectAll("tspan")
   .data(lifeData)
   .enter()
   .append("tspan")
       .attr("x", function(data) {
-          return xLinearScale(data.poverty +1.3);
+          return xLinearScale(data.poverty - 0);
       })
       .attr("y", function(data) {
-          return yLinearScale(data.healthcare +.1);
+          return yLinearScale(data.healthcare - 0.2);
       })
       .text(function(data) {
           return data.abbr
       });
 
+// Create labels for axis
+
 chartGroup.append("text")
 .attr("transform", "rotate(-90)")
-.attr("y", 0 - margin.left + 40)
+.attr("y", 0 - chartMargin.left + 40)
 .attr("x", 0 - (svgHeight / 2))
 .attr("dy", "1em")  
 .attr("class", "axisText")
 .text("Lacks Healthcare (%)");
 
 chartGroup.append("text")
-.attr("transform", `translate(${chartWidth / 2}, ${svgHeight + margin.top + 30})`)
+.attr("transform", `translate(${chartWidth / 2}, ${chartHeight + chartMargin.top + 30})`)
 .attr("class", "axisText")
 .text("In Poverty (%)");
 }).catch(function(error) {
